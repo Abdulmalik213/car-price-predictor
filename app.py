@@ -22,7 +22,7 @@ def predict():
         print(make, Model,year, engineCylinders)
 
         with open('model.pkl', 'rb') as mod:
-            mlmodel = pickle.load(mod)
+            mlmodel=pickle.load(mod)
 
         predit = mlmodel.predict([[make_encode,model_encode,float(year),float(engineCylinders)]])
 
