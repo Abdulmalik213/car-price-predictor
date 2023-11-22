@@ -14,17 +14,17 @@ def predict():
         make = request.form.get('make')
         Model = request.form.get('model')
         engineCylinders = request.form.get('engineCylinders')
-
+        year=request.form.get('year')
         df = pd.read_json('new.json')
         model_encode= df['Model_encode'][df['Model'] == Model].values[0]
         make_encode= df['Make_encode'][df['Make'] == make].values[0]
 
-        print(make, Model, engineCylinders)
+        print(make, Model,year, engineCylinders)
 
         with open('model.pkl', 'rb') as mod:
             mlmodel = pickle.load(mod)
 
-        predit = mlmodel.predict([[make_encode,model_encode,float(engineCylinders)]])
+        predit = mlmodel.predict([[make_encode,model_encode,float(year),float(engineCylinders)]])
 
         return render_template('predicted.html',predicted_value=predit[0])
     else:
