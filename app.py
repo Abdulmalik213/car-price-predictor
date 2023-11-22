@@ -8,24 +8,23 @@ app = Flask(__name__)
 def home():
     return render_template('home.html')
 
-@app.route('/predict', methods=['POST', 'GET'])
+@app.route('/predict', methods=['POST','GET'])
 def predict():
-    if request.method == "POST":
+    if request.method =="POST":
         make = request.form.get('make')
         Model = request.form.get('model')
-        Year = request.form.get('Year')
         engineCylinders = request.form.get('engineCylinders')
 
         df = pd.read_json('new.json')
         model_encode= df['Model_encode'][df['Model'] == Model].values[0]
         make_encode= df['Make_encode'][df['Make'] == make].values[0]
 
-        print(make, Model, Year, engineCylinders)
+        print(make, Model, engineCylinders)
 
         with open('model.pkl', 'rb') as mod:
             mlmodel = pickle.load(mod)
 
-        predit = mlmodel.predict([[make_encode,model_encode,float(Year),float(engineCylinders)]])
+        predit = mlmodel.predict([[make_encode,model_encode,float(engineCylinders)]])
 
         return render_template('predicted.html',predicted_value=predit[0])
     else:
